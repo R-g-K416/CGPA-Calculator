@@ -3,7 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CGPA Calculator</title>
+
+<title>Free CGPA Calculator - Calculate CGPA Online</title>
+
+<meta name="description"
+content="Free online CGPA Calculator for students. Calculate your CGPA instantly using grade points and credits.">
+
+<meta name="keywords"
+content="CGPA Calculator,GPA Calculator,CGPA,Student Calculator,College CGPA">
+
+<meta name="robots" content="index,follow">
 
 <style>
 *{
@@ -15,23 +24,32 @@
 
 body{
     background:#f4f4f4;
+    min-height:100vh;
     display:flex;
     justify-content:center;
     align-items:center;
-    min-height:100vh;
+    padding:20px;
 }
 
 .container{
+    width:100%;
+    max-width:700px;
     background:white;
     padding:25px;
-    border-radius:12px;
-    width:500px;
-    box-shadow:0 0 15px rgba(0,0,0,0.15);
+    border-radius:15px;
+    box-shadow:0 0 20px rgba(0,0,0,0.1);
 }
 
 h1{
     text-align:center;
+    margin-bottom:10px;
+}
+
+.description{
+    text-align:center;
+    color:#555;
     margin-bottom:20px;
+    line-height:1.5;
 }
 
 .row{
@@ -42,16 +60,17 @@ h1{
 
 input{
     flex:1;
-    padding:10px;
+    padding:12px;
     border:1px solid #ccc;
-    border-radius:6px;
+    border-radius:8px;
 }
 
 button{
-    padding:10px 15px;
+    padding:12px 16px;
     border:none;
-    border-radius:6px;
+    border-radius:8px;
     cursor:pointer;
+    margin-top:10px;
     margin-right:5px;
 }
 
@@ -60,14 +79,57 @@ button{
     color:white;
 }
 
+.remove-btn{
+    background:#dc3545;
+    color:white;
+}
+
 .calc-btn{
     background:#007bff;
     color:white;
 }
 
+button:hover{
+    opacity:0.9;
+}
+
 #result{
     margin-top:20px;
     text-align:center;
+    color:#007bff;
+}
+
+.info{
+    margin-top:25px;
+    padding:15px;
+    background:#f9f9f9;
+    border-radius:10px;
+}
+
+.info h2{
+    margin-bottom:10px;
+}
+
+.info p{
+    line-height:1.6;
+    color:#555;
+}
+
+footer{
+    margin-top:20px;
+    text-align:center;
+    color:#777;
+    font-size:14px;
+}
+
+@media(max-width:600px){
+    .row{
+        flex-direction:column;
+    }
+
+    button{
+        width:100%;
+    }
 }
 </style>
 </head>
@@ -77,15 +139,26 @@ button{
 
     <h1>CGPA Calculator</h1>
 
+    <p class="description">
+        Calculate your CGPA easily by entering grade points and credits.
+        Fast, free and simple for students.
+    </p>
+
     <div id="subjects">
         <div class="row">
-            <input type="number" class="grade" placeholder="Grade Point">
-            <input type="number" class="credit" placeholder="Credits">
+            <input type="number" class="grade" min="0" max="10" step="0.1"
+                   placeholder="Grade Point">
+            <input type="number" class="credit" min="1"
+                   placeholder="Credits">
         </div>
     </div>
 
     <button class="add-btn" onclick="addSubject()">
         Add Subject
+    </button>
+
+    <button class="remove-btn" onclick="removeSubject()">
+        Remove Subject
     </button>
 
     <button class="calc-btn" onclick="calculateCGPA()">
@@ -94,20 +167,53 @@ button{
 
     <h2 id="result">CGPA: --</h2>
 
+    <div class="info">
+        <h2>How CGPA is Calculated?</h2>
+
+        <p>
+            CGPA = Total (Grade Point × Credits) ÷ Total Credits
+        </p>
+
+        <p>
+            Enter your grade points and corresponding credits for each subject.
+            The calculator automatically computes your CGPA.
+        </p>
+    </div>
+
+    <footer>
+        Free CGPA Calculator © 2026
+    </footer>
+
 </div>
 
 <script>
+
 function addSubject(){
 
     const row = document.createElement("div");
+
     row.className = "row";
 
     row.innerHTML = `
-        <input type="number" class="grade" placeholder="Grade Point">
-        <input type="number" class="credit" placeholder="Credits">
+        <input type="number" class="grade"
+               min="0" max="10" step="0.1"
+               placeholder="Grade Point">
+
+        <input type="number" class="credit"
+               min="1"
+               placeholder="Credits">
     `;
 
     document.getElementById("subjects").appendChild(row);
+}
+
+function removeSubject(){
+
+    const container = document.getElementById("subjects");
+
+    if(container.children.length > 1){
+        container.removeChild(container.lastElementChild);
+    }
 }
 
 function calculateCGPA(){
@@ -124,14 +230,17 @@ function calculateCGPA(){
         const c = parseFloat(credits[i].value);
 
         if(!isNaN(g) && !isNaN(c)){
+
             totalPoints += g * c;
             totalCredits += c;
         }
     }
 
     if(totalCredits === 0){
+
         document.getElementById("result").innerText =
-        "CGPA: Invalid Input";
+        "Please enter valid values.";
+
         return;
     }
 
@@ -140,6 +249,7 @@ function calculateCGPA(){
     document.getElementById("result").innerText =
     "CGPA: " + cgpa.toFixed(2);
 }
+
 </script>
 
 </body>
